@@ -1,0 +1,36 @@
+{
+  "prime_q_upper_bound": 100000,
+  "prime_p_lower_bound_exclusive": 5,
+  "by_k": {
+    "2": {
+      "tested": 692,
+      "full_degree": 466,
+      "degree_zero": 226
+    },
+    "4": {
+      "tested": 365,
+      "full_degree": 58,
+      "degree_zero": 307
+    },
+    "6": {
+      "tested": 500,
+      "full_degree": 121,
+      "degree_zero": 379
+    },
+    "8": {
+      "tested": 186,
+      "full_degree": 8,
+      "degree_zero": 178
+    },
+    "10": {
+      "tested": 207,
+      "full_degree": 0,
+      "degree_zero": 207
+    },
+    "12": {
+      "tested": 258,
+      "full_degree": 11,
+      "degree_zero": 247
+    }
+  }
+}
