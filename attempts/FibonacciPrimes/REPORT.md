@@ -78,6 +78,20 @@ $
 
 Grantham 与 Granville 在第 3.3 节对指标上界 $N$ 给出的启发式预测为 $e^\gamma\log_\varphi N$ 个素数项，其中 $\varphi=(1+\sqrt5)/2$。上面的剩余类结论控制小素因子，而这个预测涉及整项的素性，仍需新的计数论证。[原论文第 3.3 节](https://arxiv.org/html/2307.07894#S3.SS3)
 
+## 整项素性的计数判据
+
+令 $\Lambda$ 为冯·曼戈尔特函数。对每个 $n>1$，若 $n$ 为素数，则 $\Lambda(n)=\log n$。若 $n$ 为合数，其最小素因子 $r$ 满足 $r^2\le n$，而 $\Lambda(n)$ 取 $0$ 或 $\log r$，所以 $2\Lambda(n)\le\log n$。这个阈值给出了一个可用于计数的权重
+
+$$
+w(n)=\frac{\max(2\Lambda(n)-\log n,0)}{\log n}.
+$$
+
+在所有 $n>1$ 上，素数贡献 1，合数贡献 0，包括素数的高次幂。由此无条件得到原题的充要条件：在所有素数指标 $p>5$ 上，级数 $\sum_p w(F_p)$ 发散。这里每一项只数整个 $F_p$ 的素性。前一节已证发散的级数则会把通过小因子筛查的合数也算进去。两者之间尚缺一个对真正素数项数目的下界。[阈值与级数的 Lean 等价证明](Gacha/WholeTerm.lean)
+
+Bugeaud、Mignotte 和 Siksek 已证明斐波那契数中的完全幂只有 $0,1,8,144$。由他们的结果，素数指标 $p>5$ 的合数项甚至不能是素数幂。上面的阈值证明对所有自然数都适用，Lean 编译不依赖这项外部定理。[原论文](https://annals.math.princeton.edu/2006/163-3/p05)
+
+还可以逐个追踪重因子。若 $p>5$ 与 $q$ 都为素数且 $q^2\mid F_p$，已证的指标同余给出 $p\mid q-1$ 或 $p\mid q+1$。于是 $F_p$ 整除对应的邻项，故 $q^2\mid F_{q-1}$ 或 $q^2\mid F_{q+1}$。反过来说，若对每个素数 $q$ 均能排除两个邻项中的平方因子，那么每个这样的 $F_p$ 都无平方因子。这个条件结论仍允许 $F_p$ 为两个不同素数的乘积。[重因子的 Lean 证明](Gacha/RepeatedFactor.lean)
+
 ## Lean 验证
 
 Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474`，与猜想池锁文件一致。全量 `lake exe cache get` 首次遇到 5 个传输失败，重试后 8,690 个缓存文件全部解压。对较大素数直接试除消耗过多内存，最终构建使用上述短证书。[依赖锁文件](../../lake-manifest.json) · [复现命令](../../README.md#复现本轮)
@@ -85,7 +99,7 @@ Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474
 下列输出来自根目录的 `python scripts/audit.py`，包含 `lake build` 和逐个 `#print axioms`。原题作为命题定义保存。审计对象为本轮证明的定理和引理。
 
 ```text
-lake build final line: Build completed successfully (3849 jobs).
+lake build final line: Build completed successfully (3851 jobs).
 Raw #print axioms output:
 'MathGacha.fib_prime_indices_through_30' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_four_is_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -130,6 +144,8 @@ Raw #print axioms output:
 'MathGacha.primeValue83' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffUnboundedPrimeIndices' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffSieveToSquareRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.primeSquareFibFactorAtNeighbor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibAtPrimeSquarefreeOfNoNeighborSquare' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.screenWitnessesValid' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.screenTermsComposite' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.survivor101Composite' depends on axioms: [propext]
@@ -142,5 +158,9 @@ Raw #print axioms output:
 'MathGacha.minusOneSquareAtOddIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeFactorAtOddIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.not_summable_largeLeastFactorWeight' depends on axioms: [propext, Classical.choice, Quot.sound]
-Audit passed: lake build; 55 theorem/lemma axiom reports; 18 Lean files scanned.
+'MathGacha.wholeTermPrimeThreshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.originalIffUnboundedMangoldtThreshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.primeMass_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.originalIffNotSummableFibPrimeMass' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audit passed: lake build; 61 theorem/lemma axiom reports; 20 Lean files scanned.
 ```

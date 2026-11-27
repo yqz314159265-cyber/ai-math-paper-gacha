@@ -8,3 +8,5 @@ import Gacha.MovingScreen
 import Gacha.Period
 import Gacha.SplitPrime
 import Gacha.WeightedSieve
+import Gacha.WholeTerm
+import Gacha.RepeatedFactor
