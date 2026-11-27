@@ -48,6 +48,15 @@ Grantham 与 Granville 用线性递推数列的有限数据研究素数值分布
 
 $F_{93}=12200160415121876738<2^{64}$，位于前十二个素数基的确定性范围内。Lean 对较大的素数值采用 Lucas 证书：$F_{43},F_{47},F_{83}$ 的模幂见证依次为 2、5、3；$F_{83}=99194853094755497$。这些整数的素性由内核检查因子分解和模幂等式。第二行的 102 对指标与因子逐对对应 Lean 的已验证列表。1,103 项中，除另行分解的 $F_{101}$ 外，本轮未逐项判定其素性。[Python 程序](experiment.py) · [完整数据](results.json) · [有限分类](Gacha/Certificates.lean) · [Lucas 证书](Gacha/Primality.lean) · [筛查证书](Gacha/Screen.lean) · [十二基界的来源](https://doi.org/10.1090/mcom/3134)
 
+随后将 Lean 的完整分类延长至 $n=137$。在 $94\le n\le137$ 中，恰有两项为素数：
+
+| 指标 $n$ | $F_n$ | Lucas 模幂见证 |
+| ---: | ---: | ---: |
+| 131 | 1,066,340,417,491,710,595,814,572,169 | 3 |
+| 137 | 19,134,702,400,093,278,081,449,423,917 | 2 |
+
+对这两项，Python 用试除法完整分解 $F_n-1$ 并找到见证。Lean 独立核验分解中每个素因子的素性、乘积和全部模幂条件。对同一区间中的其余素数指标，取七个已知因子的乘积，逐项核实它与 $F_n$ 的最大公因数严格介于 1 和 $F_n$ 之间。故前 138 项（从 $F_0$ 起）恰有 14 个素数项。[完整分类与证书](Gacha/LargePrefix.lean) · [Python 复算](lucas_certificates.py)
+
 ## 随素数指标增长的筛界
 
 令 $P^-(t)$ 表示 $t>1$ 的最小素因子。本轮进一步证明
@@ -104,6 +113,8 @@ $$
 
 在这个位置，$q\mid F_p$ 与 $P^-(F_p)=q$ 等价。若 $q$ 是合数且整除 $F_p$，则 $q$ 自身的最小素因子也整除 $F_p$，却小于已证的下界 $2p-1$。当 $q$ 为素数时，在模 $q$ 的代数闭包中取特征根 $a,b$。由 $ab=-1$、$p$ 为奇数、$2p=q+1$，将 $(a^p-b^p)^2$ 展开，并代入 $a^q+b^q=1$，得到 $2F_p^2\equiv1+F_q\pmod q$。而 $F_q\bmod q$ 等于勒让德符号 $(5/q)$。二次互反律把该符号的负值化为 $q\bmod5\in\{2,3\}$，也就得到了上式。若 $p>7$，还有 $2p-1<F_p$，于是整项必为合数。Drobot 在 2000 年证明了这条合数充分条件；这里另行验证了逆向与最小因子等价式。$p=7$ 解释了两个结论边界的区别：$2p-1=F_7=13$。[Drobot 原文](https://www.mathstat.dal.ca/FQ/Scanned/38-1/drobot.pdf) · [模素数的符号](Gacha/IndexResidue.lean) · [边界判据](Gacha/Drobot.lean)
 
+若 $2p-1$ 没有整除 $F_p$，则其最小素因子至少为 $4p+1$。原因是每个素因子 $q$ 除了满足 $q=kp\pm1$，还满足 $q\equiv1\pmod4$。枚举 $1\le k\le4$，严格小于 $4p+1$ 的数中只剩 $2p-1$ 这一种可能。两个端点都能达到：$F_{19}$ 的最小素因子是 $37=2\cdot19-1$，$F_{67}$ 的最小素因子是 $269=4\cdot67+1$。[间隔及端点证明](Gacha/Drobot.lean)
+
 在 $7<p\le10^6$ 的 78,494 个素数指标上，Python 用快速倍增直接计算 $F_p\bmod(2p-1)$，并独立筛出 $2p-1$ 的素性。7,749 个指标令 $2p-1$ 为素数，其中恰有 5,175 个使其整除 $F_p$。这 5,175 个因子均只出现一次。各余数类的计数和前十二个实例见实验数据。要从这个合数判据导出无限族，还需要满足指定余数条件的素数对 $(p,2p-1)$ 无穷多。[实验程序](boundary_experiment.py) · [计数结果](boundary_results.json)
 
 符号还可以指定一个因子出现在哪个剩余类里。若 $(5/p)=-1$，那么 $F_p$ 至少有一个素因子 $q\equiv-1\pmod p$：否则其全部素因子模 $p$ 都等于 1，乘积便与 $F_p\bmod p$ 矛盾。对前述任意 $K$ 的构造，把模数改为 $5M_K$，仍取余 3，就能额外保证这个负号。因此任给 $K,B$，存在素数 $p>B$ 与 $q>Kp$，使 $q\mid F_p$ 且 $p\mid q+1$。[带指定剩余类的大因子](Gacha/SignedSieve.lean)
@@ -129,7 +140,7 @@ Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474
 下列输出来自根目录的 `python scripts/audit.py`，包含 `lake build` 和逐个 `#print axioms`。原题作为命题定义保存。审计对象为本轮证明的定理和引理。
 
 ```text
-lake build final line: Build completed successfully (3859 jobs).
+lake build final line: Build completed successfully (3860 jobs).
 Raw #print axioms output:
 'MathGacha.fib_prime_indices_through_30' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_four_is_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -145,6 +156,9 @@ Raw #print axioms output:
 'MathGacha.boundaryDvdIff' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.leastFactorAtBoundaryIff' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.compositeAtBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.primeFactorGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.leastFactorGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.leastFactor67' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibMulFirstOrder' depends on axioms: [propext, Quot.sound]
 'MathGacha.fibQuotientGcd' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibPrimePowerAtMultiple' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -168,6 +182,16 @@ Raw #print axioms output:
 'MathGacha.fib_prime_index_eq_one_or_neg_one' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.exists_prime_factor_eq_neg_one_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.legendreSym_five_eq_neg_one_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.factors_131_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib_131_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib_131_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.factors_137_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib_137_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib_137_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.sieve_gcd_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib_prime_index_excluded_by_sieve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.old_index_le_93' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib_prime_indices_through_137' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.linearFormsModulusCoprime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.compositeLinearFormsOnClass' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.arbitrarilyLargePrimeWithCompositeLinearForms' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -215,5 +239,5 @@ Raw #print axioms output:
 'MathGacha.originalIffUnboundedMangoldtThreshold' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeMass_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffNotSummableFibPrimeMass' depends on axioms: [propext, Classical.choice, Quot.sound]
-Audit passed: lake build; 84 theorem/lemma axiom reports; 25 Lean files scanned.
+Audit passed: lake build; 97 theorem/lemma axiom reports; 26 Lean files scanned.
 ```

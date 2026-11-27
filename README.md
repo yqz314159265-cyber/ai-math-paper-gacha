@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 对素数指标 $p>5$，确定了 $F_p$ 的最小素因子何时等于 $2p-1$，也证明最小素因子与 $p$ 之比无界。已完整判定第 0 项到第 93 项的素性。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 对素数指标 $p>5$，确定了 $F_p$ 的最小素因子何时等于 $2p-1$，也证明最小素因子与 $p$ 之比无界。已完整判定第 0 项到第 137 项的素性。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -23,6 +23,7 @@ python scripts/audit.py
 python attempts/FibonacciPrimes/experiment.py
 python attempts/FibonacciPrimes/linear_experiment.py
 python attempts/FibonacciPrimes/boundary_experiment.py
+python attempts/FibonacciPrimes/lucas_certificates.py
 python scripts/draw.py --receipt d1
 ```
 

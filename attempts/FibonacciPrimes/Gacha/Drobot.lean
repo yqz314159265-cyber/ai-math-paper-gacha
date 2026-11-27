@@ -1,4 +1,5 @@
 import Gacha.IndexResidue
+import Gacha.Squares
 
 namespace MathGacha
 
@@ -105,7 +106,7 @@ theorem leastFactorAtBoundaryIff {p : ℕ} (hp : p.Prime) (h : 5 < p) :
       (Nat.minFac_dvd _)
     exact Nat.le_antisymm (Nat.minFac_le_of_dvd (by omega) hd) (by omega)
 
-/-- Drobot's composite-index test, with the prime index and the composite term distinguished. -/
+/-- Drobot's sufficient condition for a composite term at a prime index. -/
 theorem compositeAtBoundary {p : ℕ} (hp : p.Prime) (h : 7 < p)
     (hq : (2*p-1).Prime) (hr : p % 5 = 2 ∨ p % 5 = 4) : ¬ (Nat.fib p).Prime := by
   intro hf
@@ -113,5 +114,33 @@ theorem compositeAtBoundary {p : ℕ} (hp : p.Prime) (h : 7 < p)
   have he := (Nat.dvd_prime_two_le hf hq.two_le).mp hd
   have hlt := fibAboveBoundary (p:=p) (by omega)
   omega
+
+/-- The only possible prime factor below 4p+1 is the boundary factor 2p−1. -/
+theorem primeFactorGap {p q : ℕ} (hp : p.Prime) (h : 5 < p) (hq : q.Prime)
+    (hd : q ∣ Nat.fib p) : q = 2*p-1 ∨ 4*p+1 ≤ q := by
+  by_cases hlarge : 4*p+1 ≤ q
+  · exact Or.inr hlarge
+  left
+  obtain ⟨m, hm⟩ := hp.odd_of_ne_two (by omega)
+  have hodd : p = 2*m+1 := by omega
+  have hlo := fibLeastFactorLinearBound hp h hq hd
+  have hfour := (primeFactorAtOddIndex m q hq (hodd ▸ hd)).resolve_left (by omega)
+  obtain ⟨k, hk1, hk4, hr⟩ := divisorProgressionUpTo hp h hq hd (by omega : q ≤ 4*p)
+  interval_cases k <;> rcases hr with hr | hr <;> omega
+
+/-- Outside Drobot's two prime-pair classes the entire interval up to 4p is excluded. -/
+theorem leastFactorGap {p : ℕ} (hp : p.Prime) (h : 5 < p) :
+    4*p+1 ≤ (Nat.fib p).minFac ↔ ¬ ((2*p-1).Prime ∧ (p%5=2 ∨ p%5=4)) := by
+  rw [← leastFactorAtBoundaryIff hp h]
+  have hg := Nat.le_fib_self (show 5 ≤ p by omega)
+  have hgap := primeFactorGap hp h (Nat.minFac_prime (by omega : Nat.fib p ≠ 1)) (Nat.minFac_dvd _)
+  omega
+
+/-- The upper edge of the gap occurs at index 67. -/
+theorem leastFactor67 : (Nat.fib 67).minFac = 269 := by
+  have hl := (leastFactorGap (p:=67) (by decide) (by decide)).mpr (by decide)
+  have hd : 269 ∣ Nat.fastFib 67 := by decide +kernel
+  rw [Nat.fastFib_eq] at hd
+  exact Nat.le_antisymm (Nat.minFac_le_of_dvd (by decide) hd) hl
 
 end MathGacha
