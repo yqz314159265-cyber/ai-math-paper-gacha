@@ -1,0 +1,35 @@
+{
+  "index_bound": 1000000,
+  "prime_indices_above_7": 78494,
+  "prime_pairs": 7749,
+  "boundary_divisors": 5175,
+  "repeated_boundary_divisors": 0,
+  "first_divisor_indices": [
+    19,
+    37,
+    79,
+    97,
+    139,
+    157,
+    199,
+    229,
+    307,
+    337,
+    367,
+    379
+  ],
+  "by_index_mod_5": {
+    "1": {
+      "prime_pairs": 2574,
+      "divisors": 0
+    },
+    "2": {
+      "prime_pairs": 2583,
+      "divisors": 2583
+    },
+    "4": {
+      "prime_pairs": 2592,
+      "divisors": 2592
+    }
+  }
+}
