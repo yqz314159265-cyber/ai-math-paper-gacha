@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/20$。已给出原题等价的有限域互素检验和 $4p+1$ 的精确模幂判据。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/2$。对每个固定的 $A>\log 4$，分母还可取 $A$。已给出原题等价的有限域互素检验，并用整数二次型精确判定 $4p+1$ 是否整除 $F_p$。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 

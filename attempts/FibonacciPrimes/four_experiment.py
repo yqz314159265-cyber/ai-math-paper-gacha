@@ -31,6 +31,20 @@ def legendre_nonzero(a: int, q: int) -> bool:
     return symbol == q - 1
 
 
+def index_form(p: int):
+    """Return an integer witness to p = u(u+1) + 25v², if one exists."""
+    for u in range(isqrt(p) + 1):
+        gap = p - u * (u + 1)
+        if gap < 0:
+            break
+        quotient, remainder = divmod(gap, 25)
+        if remainder == 0:
+            v = isqrt(quotient)
+            if v * v == quotient:
+                return [u, v]
+    return None
+
+
 def main() -> None:
     prime = primes_through(4 * LIMIT + 1)
     groups = defaultdict(lambda: {
@@ -43,6 +57,7 @@ def main() -> None:
         "criterion_checked": 0,
         "criterion_matches": 0,
         "both_root_signs_agree": 0,
+        "integer_criterion_checked": 0,
         "single_power_checked": 0,
         "quadratic_form_checked": 0,
         "quadratic_form_matches": 0,
@@ -123,6 +138,11 @@ def main() -> None:
                     "a_minus": a_minus,
                 })
 
+        witness = index_form(p) if q_is_prime else None
+        if (witness is not None) != divides:
+            raise ValueError(f"integer form criterion disagrees at p={p}, q={q}")
+        stat["integer_criterion_checked"] += 1
+
         if divides and len(hits) < 10:
             hits.append({
                 "p": p,
@@ -133,6 +153,7 @@ def main() -> None:
                 "2p_minus_1": other,
                 "2p_minus_1_prime": bool(prime[other]),
                 "2p_minus_1_divides_Fp": other_divides,
+                "index_form_u_v": witness,
                 "criterion_a_nonsquare": criterion,
                 "both_root_signs_agree": roots_agree,
             })
@@ -145,6 +166,7 @@ def main() -> None:
             "prime_indices": "7 ≤ p ≤ 1,000,000",
             "q": "4p + 1",
             "criterion": "for q prime and p mod 5 = 2: q | F_p iff a=(1+sqrt(5))/2 is a quadratic nonresidue mod q",
+            "integer_criterion": "q prime and p = u(u+1) + 25*v^2",
             "single_power": "5^p = 1 mod q (q prime, p mod 5 = 2)",
             "quadratic_form": "q = x^2 + 100*y^2 (q prime, p mod 5 = 2)",
             "implementation": "standard-library sieve and fast-doubling fib_mod imported from linear_experiment.py",

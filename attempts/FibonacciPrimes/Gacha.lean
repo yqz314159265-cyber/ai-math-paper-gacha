@@ -20,3 +20,5 @@ import Gacha.DicksonTests
 import Gacha.DicksonGcd
 import Gacha.QuarticCharacter
 import Gacha.EffectiveWitness
+import Gacha.FourIndexForm
+import Gacha.PrimorialScreen

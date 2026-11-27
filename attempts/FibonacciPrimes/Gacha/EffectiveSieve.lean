@@ -74,12 +74,9 @@ theorem exists_prime_modEq_one_with_bound {M : ℕ} (hM : 3 ≤ M) :
 
 /-- The residue one covers all slopes at least three. The exceptional lower
 slopes are eliminated by the interval below 4p+1 and the condition modulo five. -/
-theorem leastFactorInOneClass {K p : ℕ} (hK : 4 ≤ K) (hp : p.Prime) (hp5 : 5 < p)
-    (hmod : p ≡ 1 [MOD Nat.lcmUpto (K+1)]) : K*p < (Nat.fib p).minFac := by
-  let M := Nat.lcmUpto (K+1)
-  have hdM (d : ℕ) (hd : 1 ≤ d) (hdK : d ≤ K+1) : d ∣ M :=
-    Finset.dvd_lcm (f:=id) (Finset.mem_Icc.mpr ⟨hd,hdK⟩)
-  have hpmod : p%5=1 := hmod.of_dvd (hdM 5 (by decide) (by omega))
+theorem leastFactorAtSmallPrimeCongruences {K p : ℕ} (hK : 4 ≤ K) (hp : p.Prime) (hp5 : 5 < p)
+    (hsmall : ∀ r : ℕ, r.Prime → r ≤ K+1 → r ∣ p-1) : K*p < (Nat.fib p).minFac := by
+  have hpmod : p%5=1 := by have := hsmall 5 (by decide) (by omega); omega
   let q := (Nat.fib p).minFac
   have hf := Nat.le_fib_self (n:=p) (by omega)
   have hqp : q.Prime := Nat.minFac_prime (by omega)
@@ -91,24 +88,35 @@ theorem leastFactorInOneClass {K p : ℕ} (hK : 4 ≤ K) (hp : p.Prime) (hp5 : 5
   have hk3 : 3 ≤ k := by
     by_contra! hsmall
     interval_cases k <;> rcases hform with hh | hh <;> omega
-  have hbase : M ∣ p-1 := hmod.symm.dvd'
-  have hdiv (d : ℕ) (hd : 1 ≤ d) (hdK : d ≤ K+1) : d ∣ k*(p-1) :=
-    dvd_mul_of_dvd_right ((hdM d hd hdK).trans hbase) k
+  have hdiv (d : ℕ) (hd : 2 ≤ d) (hdK : d ≤ K+1) : d.minFac ∣ k*(p-1) :=
+    dvd_mul_of_dvd_right (hsmall d.minFac (Nat.minFac_prime (by omega))
+      ((Nat.minFac_le (by omega)).trans hdK)) k
   have hmul : k*p=k+k*(p-1) := by
     calc k*p = k*(1+(p-1)) := congrArg (k*·) (by omega)
          _ = _ := by ring
   have hlt : k < k*p := by simpa using Nat.mul_lt_mul_of_pos_left (show 1<p by omega) hk
   rcases hform with hplus | hminus
-  · have hd : k+1 ∣ q := by
+  · have hd : (k+1).minFac ∣ q := by
       rw [hplus,show k*p+1=(k+1)+k*(p-1) by omega]
-      exact dvd_add dvd_rfl (hdiv _ (by omega) (by omega))
-    have := (Nat.dvd_prime_two_le hqp (show 2≤k+1 by omega)).mp hd
+      exact dvd_add (Nat.minFac_dvd _) (hdiv _ (by omega) (by omega))
+    have hh := (Nat.dvd_prime_two_le hqp (Nat.minFac_prime (by omega)).two_le).mp hd
+    have hle := Nat.minFac_le (show 0<k+1 by omega)
     omega
-  · have hd : k-1 ∣ q := by
+  · have hd : (k-1).minFac ∣ q := by
       rw [hminus,show k*p-1=(k-1)+k*(p-1) by omega]
-      exact dvd_add dvd_rfl (hdiv _ (by omega) (by omega))
-    have := (Nat.dvd_prime_two_le hqp (show 2≤k-1 by omega)).mp hd
+      exact dvd_add (Nat.minFac_dvd _) (hdiv _ (by omega) (by omega))
+    have hh := (Nat.dvd_prime_two_le hqp (Nat.minFac_prime (by omega)).two_le).mp hd
+    have hle := Nat.minFac_le (show 0<k-1 by omega)
     omega
+
+/-- The full lcm class supplies all the required prime congruences. -/
+theorem leastFactorInOneClass {K p : ℕ} (hK : 4 ≤ K) (hp : p.Prime) (hp5 : 5 < p)
+    (hmod : p ≡ 1 [MOD Nat.lcmUpto (K+1)]) : K*p < (Nat.fib p).minFac := by
+  apply leastFactorAtSmallPrimeCongruences hK hp hp5
+  intro r hr hrK
+  have hd : r ∣ Nat.lcmUpto (K+1) :=
+    Finset.dvd_lcm (f:=id) (Finset.mem_Icc.mpr ⟨hr.one_le,hrK⟩)
+  exact hd.trans hmod.symm.dvd'
 
 /-- A convenient integer constant in the Chebyshev bound for the sieve modulus. -/
 theorem logLcmUpper (n : ℕ) : Real.log (Nat.lcmUpto n) ≤ 7*(n:ℝ) := by
