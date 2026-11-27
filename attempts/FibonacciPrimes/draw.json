@@ -1,0 +1,23 @@
+{
+  "upstream": "ea8e3e198ded6fc73efb7f5653b74b28ac4ae1a8",
+  "candidates": [
+    [
+      "Erdos287PrimePair",
+      "Erdos287.erdos_287.variants.prime_conjecture",
+      "FormalConjectures/ErdosProblems/287.lean"
+    ],
+    [
+      "Erdos1003",
+      "Erdos1003.erdos_1003",
+      "FormalConjectures/ErdosProblems/1003.lean"
+    ],
+    [
+      "FibonacciPrimes",
+      "FibonacciPrimes.fib_primes_infinite",
+      "FormalConjectures/Wikipedia/FibonacciPrimes.lean"
+    ]
+  ],
+  "receipt": "d1",
+  "index": 2,
+  "selected": "FibonacciPrimes"
+}
