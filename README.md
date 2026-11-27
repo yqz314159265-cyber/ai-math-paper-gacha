@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 对任意 $A>1/2$，有任意大的素数 $p$ 满足 $P^-(F_p)>p\log\log(p)/A$，其中 $P^-$ 表示最小素因子。对每个固定 $K$，满足 $P^-(F_p)>Kp$ 的素数指标的归一化 Abel 权重趋于 1。还存在非递减且无界的 $f(X)$，使满足 $P^-(F_p)>p f(X)$ 的指标在有限和 $\sum_{p\le X}(\log p)/p$ 中的相对权重趋于 1。621 位的 $F_{2971}$ 已核验证书。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 有任意大的素数 $p$ 满足 $P^-(F_p)>2^{-30}p\log p$，其中 $P^-$ 表示最小素因子。对每个固定 $K$，满足 $P^-(F_p)>Kp$ 的素数指标的归一化 Abel 权重趋于 1。还存在非递减且无界的 $f(X)$，使满足 $P^-(F_p)>p f(X)$ 的指标在有限和 $\sum_{p\le X}(\log p)/p$ 中的相对权重趋于 1。621 位的 $F_{2971}$ 已核验证书。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -34,6 +34,7 @@ python attempts/FibonacciPrimes/lucas_certificates.py
 python attempts/FibonacciPrimes/check_fib_lucas.py
 python attempts/FibonacciPrimes/check_fib2971.py
 python attempts/FibonacciPrimes/rank_order_experiment.py
+python attempts/FibonacciPrimes/log_slope_experiment.py
 python scripts/draw.py --receipt d1
 ```
 

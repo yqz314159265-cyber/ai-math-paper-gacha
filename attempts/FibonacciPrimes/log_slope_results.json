@@ -1,0 +1,159 @@
+{
+  "prefixes": {
+    "10000": {
+      "prime_indices_above_5": 1226,
+      "cutoffs": {
+        "half": {
+          "prime_pair_indices": 703,
+          "factor_indices": 177,
+          "raw_candidate_pairs": 859,
+          "character_aligned_pairs": 470,
+          "mod4_filtered_pairs": 292,
+          "raw_candidate_indices": 703,
+          "character_aligned_indices": 437,
+          "mod4_filtered_indices": 266
+        },
+        "single": {
+          "prime_pair_indices": 1100,
+          "factor_indices": 216,
+          "raw_candidate_pairs": 2176,
+          "character_aligned_pairs": 1096,
+          "mod4_filtered_pairs": 465,
+          "raw_candidate_indices": 1100,
+          "character_aligned_indices": 805,
+          "mod4_filtered_indices": 412
+        },
+        "double": {
+          "prime_pair_indices": 1220,
+          "factor_indices": 279,
+          "raw_candidate_pairs": 4563,
+          "character_aligned_pairs": 2283,
+          "mod4_filtered_pairs": 1135,
+          "raw_candidate_indices": 1220,
+          "character_aligned_indices": 1119,
+          "mod4_filtered_indices": 806
+        }
+      }
+    },
+    "100000": {
+      "prime_indices_above_5": 9589,
+      "cutoffs": {
+        "half": {
+          "prime_pair_indices": 6185,
+          "factor_indices": 1333,
+          "raw_candidate_pairs": 8307,
+          "character_aligned_pairs": 4282,
+          "mod4_filtered_pairs": 2446,
+          "raw_candidate_indices": 6185,
+          "character_aligned_indices": 3810,
+          "mod4_filtered_indices": 2260
+        },
+        "single": {
+          "prime_pair_indices": 8761,
+          "factor_indices": 1590,
+          "raw_candidate_pairs": 18670,
+          "character_aligned_pairs": 9484,
+          "mod4_filtered_pairs": 4117,
+          "raw_candidate_indices": 8761,
+          "character_aligned_indices": 6487,
+          "mod4_filtered_indices": 3512
+        },
+        "double": {
+          "prime_pair_indices": 9542,
+          "factor_indices": 2029,
+          "raw_candidate_pairs": 38874,
+          "character_aligned_pairs": 19167,
+          "mod4_filtered_pairs": 9143,
+          "raw_candidate_indices": 9542,
+          "character_aligned_indices": 8754,
+          "mod4_filtered_indices": 6419
+        }
+      }
+    },
+    "1000000": {
+      "prime_indices_above_5": 78495,
+      "cutoffs": {
+        "half": {
+          "prime_pair_indices": 50598,
+          "factor_indices": 9509,
+          "raw_candidate_pairs": 69617,
+          "character_aligned_pairs": 35083,
+          "mod4_filtered_pairs": 18788,
+          "raw_candidate_indices": 50598,
+          "character_aligned_indices": 30948,
+          "mod4_filtered_indices": 17618
+        },
+        "single": {
+          "prime_pair_indices": 71946,
+          "factor_indices": 11735,
+          "raw_candidate_pairs": 160370,
+          "character_aligned_pairs": 80694,
+          "mod4_filtered_pairs": 37183,
+          "raw_candidate_indices": 71946,
+          "character_aligned_indices": 53946,
+          "mod4_filtered_indices": 31273
+        },
+        "double": {
+          "prime_pair_indices": 78093,
+          "factor_indices": 14513,
+          "raw_candidate_pairs": 331985,
+          "character_aligned_pairs": 166900,
+          "mod4_filtered_pairs": 74858,
+          "raw_candidate_indices": 78093,
+          "character_aligned_indices": 71948,
+          "mod4_filtered_indices": 52114
+        }
+      }
+    }
+  },
+  "first_factor_examples": [
+    {
+      "index": 7,
+      "least_factor": 13
+    },
+    {
+      "index": 19,
+      "least_factor": 37
+    },
+    {
+      "index": 37,
+      "least_factor": 73
+    },
+    {
+      "index": 59,
+      "least_factor": 353
+    },
+    {
+      "index": 67,
+      "least_factor": 269
+    },
+    {
+      "index": 79,
+      "least_factor": 157
+    },
+    {
+      "index": 97,
+      "least_factor": 193
+    },
+    {
+      "index": 113,
+      "least_factor": 677
+    },
+    {
+      "index": 139,
+      "least_factor": 277
+    },
+    {
+      "index": 157,
+      "least_factor": 313
+    },
+    {
+      "index": 163,
+      "least_factor": 977
+    },
+    {
+      "index": 199,
+      "least_factor": 397
+    }
+  ]
+}

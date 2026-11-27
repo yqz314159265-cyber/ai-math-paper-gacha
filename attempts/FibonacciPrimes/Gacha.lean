@@ -43,3 +43,12 @@ import Gacha.MinusPairBridge
 import Gacha.PairCountBridge
 import Gacha.GaussianFib
 import Gacha.MovingDensity
+import Gacha.PrimePairQuant
+import Gacha.PellFib
+import Gacha.PairCountWitness
+import Gacha.SquarefreePairMass
+import Gacha.ConcretePairCount
+import Gacha.CoprimePairMass
+import Gacha.FactorMultiplicity
+import Gacha.AveragePairCount
+import Gacha.LogRoughIndices
