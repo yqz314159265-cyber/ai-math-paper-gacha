@@ -217,6 +217,43 @@ $$
 \]
 例如 $37=3\cdot4+25$，$67=6\cdot7+25$；这给出 $149\mid F_{37}$ 和 $269\mid F_{67}$。设 $q=4p+1$。在可能发生整除的分支，$q\equiv29\pmod{40}$，写 $q=a^2+b^2$ 并令 $a$ 为奇数。此时 $b$ 是奇数的两倍。把 $a/b$ 看作模 $q$ 的一个 $-1$ 的平方根，已有的有限域判据化为 $2+a/b$ 是否为平方。用二次互反律分别计算 $a+2b$ 和 $b$ 的雅可比符号，得到这等价于 $5\mid b$，即 $q=x^2+100y^2$。反向中这项表示和 $p,q$ 的素性已经强制 $p\equiv2\pmod5$。最后令奇数 $x=2u+1$。Python 独立枚举整数表示，与模快速倍增的整除检验对照，$7\le p\le10^6$ 的 78,495 个素数指标中，两个方法找到了相同的 1,255 个指标。[雅可比符号计算](Gacha/QuarticForm.lean) · [二次型等价式](Gacha/FourIndexForm.lean) · [Lehmer 原文，定理 2](https://www.fq.math.ca/Scanned/4-2/lehmer.pdf) · [逐项对照结果](four_experiment_results.json)
 
+## 把一般乘数拆成素数幂
+
+设 $q>5$ 是素数，$t=q-(5/q)=kp$，其中 $(5/q)$ 为勒让德符号。对每个素数 $\ell\mid k$，取 $d_\ell=\ell^{v_\ell(k)}$。要判定 $q\mid F_p$，只需分别检验每个 $D_{d_\ell}(X,1)+3$ 在 $\mathbb F_q$ 中是否有根；所有检验都通过，恰好等价于整除。设 $u$ 为两个斐波那契特征根之比，其乘法阶整除 $kp$。对给定的 $\ell$，对应多项式有根，等价于该阶仍整除 $p(k/d_\ell)$。对每个 $\ell$ 都能删掉这部分，恰好说明该阶整除 $p$。因此，原猜想等价于存在任意大的素数指标 $p$，使每个到原检验上界的候选 $q$ 都至少有一个素数幂检验失败。[等价式的 Lean 证明](Gacha/PrimePowerTests.lean)
+
+Python 穷举 $q\le40000$、$2\le k\le100$ 的 2,475 对符合条件的素数 $(p,q)$，其中 1,789 对可以拆成两个或更多素数幂。共做 3,263 次多项式互素检验，372 对在所有分量上都有根，与斐波那契模快速倍增的结果逐对一致。例如 $(p,q)=(37,2221)$ 的乘数为 60，只需检查次数 3、4、5。[实验程序](primary_experiment.py) · [数据](primary_results.json)
+
+## 第三个可能的因子与三次同余
+
+当 $q+1=2mp$、$q\bmod5\in\{2,3\}$，且 $q>5,p>5$ 都为素数、$m$ 为奇数时，已经证明
+\[
+q\mid F_p \quad\Longleftrightarrow\quad
+\exists x\in\mathbb F_q,\quad D_m(x,-1)=1 .
+\]
+这里 $D_m$ 是第一类 Dickson 多项式。取 $i^2=-1$，用齐次变换 $D_m(ix,1)=i^mD_m(x,-1)$，再利用奇次多项式可以改变符号，便将检验次数从 $2m$ 减半。[奇数半次数公式](Gacha/OddHalf.lean)
+
+特别地，取 $q=6p-1$。对每个素数 $p>5$，$q\mid F_p$ 当且仅当 $q$ 为素数、$p\bmod5\in\{3,4\}$，并且 $x^3+3x=1$ 在 $\mathbb F_q$ 中有解。整除成立时 $q<(2p-1)^2$，因而 $q$ 自身必为素数。在符合素性和剩余类条件的分支，若 $q$ 没有整除 $F_p$，还得到 $5F_p^2\equiv3\bmod q$。这由奇数指标的三倍角恒等式 $F_{3p}=F_p(5F_p^2-3)$ 以及 $q\mid F_{3p}$ 推出。[第三位置三次判据](Gacha/SixthCubic.lean) · [非零余数的平方](Gacha/SixResidue.lean)
+
+Sun 的推论 6.5(ii) 给出了这个位置的另一条整数判据：当 $q=6p-1$ 为素数时，$q\mid F_p$ 等价于 $q=5a^2+108b^2$。Python 逐项比较三次判据、整数表示和 $F_p\bmod q$，遍历 $7\le p\le10^6$ 的 78,495 个素数，三者均得到 3,219 个整除实例。在 9,650 个通过素性和剩余类筛查的实例中，三次式有三个根的有 3,219 个，其余 6,431 个无根。$p=19$ 时，$q=113=5+108$，三个根为 28、41、44。Lean 审计覆盖上段三次判据；整数表示的全范围依据是 Sun 的已发表证明。[Sun，推论 6.5(ii)](https://matwbn.icm.edu.pl/ksiazki/aa/aa84/aa8441.pdf) · [三种方法的独立对照](six_experiment.py) · [结果](six_results.json)
+
+## 一个素数指标超过一千万亿的合数项
+
+取此前构造的素数 $p=1010824870255201$。在 $1\le j\le3000000$ 的 $jp\pm1$ 中，计算找出三个整除 $F_p$ 的数：
+\[
+54p-1=54584542993780853,\quad
+5694p-1=5755636811233114493,\quad
+662994p-1=670170824029976731793 .
+\]
+三个数都在 $(2p-1)^2$ 之下，因此整除性已足以推出它们各自为素数。Lean 采用二进制快速倍增，逐位求 $(F_p,F_{p+1})$ 在各个模数下的余数，分别核验这三个数都整除 $F_p$，且它们的平方都不整除 $F_p$。三者的乘积小于 $p^4\le F_p$，而它们在 $F_p$ 中的指数均为一，故 $F_p$ 至少还有第四个不同的素因子。[内核模运算](Gacha/FastModFib.lean) · [四个不同素因子的证明](Gacha/LargeCofactor.lean) · [搜索程序](large_factor_experiment.py) · [九个指标的计算结果](large_factor_results.json)
+
+该项的最小素因子恰为 $54584542993780853=54p-1$。在已经排除的 $35p$ 与这个候选之间，只需检查 $38p-1,40p+1,48p+1$。第一、三个候选分别可被 677、7 整除，不能是最小素因子。中间候选满足 $F_p\bmod(40p+1)=3925665491575363$。因此首个候选的最小性也通过了内核验证。[精确最小因子](Gacha/HugeLeastFactor.lean)
+
+## 素数指标的有限筛查与平均值界
+
+在 $138\le n\le1000$，如果 $F_n$ 是素数，则 $n$ 必在 $\{359,431,433,449,509,569,571\}$ 中。Lean 对其他素数指标核验了 $2^{F_n}\not\equiv2\pmod{F_n}$，再用素数指标定理处理合数指标。因此 $138\le n\le358$ 无斐波那契素数。证明用二进制模幂逐位平方，检查每段的全部指标。[模幂拒绝条件与可靠性](Gacha/FermatTest.lean) · [有限区间的排除证明](Gacha/PrefixFermat.lean)
+
+另有一个关于剩余类素数总量的估计。给定 $c>1/2$，存在任意大的 $N$ 使 $\sum_{r\le N,\ r\ \mathrm{prime},\ r\equiv1\bmod4}\log r<cN$。如果所有充分大的前缀和都至少为 $cN$，对递减权重 $(n+1)^{-s}$ 作分部求和，就会使归一化 Abel 极限至少为 $c$；模四余一的该极限是 $1/2$。这个结论可用于选择同余筛模数。[有限加权和比较及剩余类估计](Gacha/AbelPrefix.lean)
+
 ## Lean 验证
 
 Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474`，与猜想池锁文件一致。全量 `lake exe cache get` 首次遇到 5 个传输失败，重试后 8,690 个缓存文件全部解压。对较大素数直接试除消耗过多内存，最终构建使用上述短证书。[依赖锁文件](../../lake-manifest.json) · [复现命令](../../README.md#复现本轮)
@@ -224,8 +261,14 @@ Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474
 下列输出来自根目录的 `python scripts/audit.py`，包含 `lake build` 和逐个 `#print axioms`。原题作为命题定义保存。审计对象为本轮证明的定理和引理。
 
 ```text
-lake build final line: Build completed successfully (3891 jobs).
+lake build final line: Build completed successfully (3901 jobs).
 Raw #print axioms output:
+'MathGacha.compareWeightedPrefixes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.abelSeqWeightAntitone' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.abelSeqWeightSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.frequentlyLowPrefixOfAbelLimit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.quarterLogWeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.quarterThetaFrequentlyBelow' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.tendsto_complexResidueClass_abel_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.re_residueClass_LSeries_eq_tsum' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.tendsto_realResidueClass_abel_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -290,6 +333,17 @@ Raw #print axioms output:
 'MathGacha.fibLeastFactorLinearBound' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.divisorProgressionUpTo' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.noSmallFactorFromCompositeForms' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPairMod_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPairMod_first_eq_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.targetBits_value' does not depend on any axioms
+'MathGacha.largeIndexDvdIff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexFirstDvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexSecondDvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexThirdDvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexCandidateResidue' depends on axioms: [propext, Quot.sound]
+'MathGacha.largeIndexExcludesForty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fermatRejectFalse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.nonprimeOfFermatReject' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fourBoundaryFibDvdIffNonsquare' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fourBoundaryQModEight' depends on axioms: [propext, Quot.sound]
 'MathGacha.fourBoundaryFibDvdOfNonsquare' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -314,6 +368,9 @@ Raw #print axioms output:
 'MathGacha.fibRootsFromDiscriminant' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibRootsAtPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibFrobeniusZero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.divisor_in_linear_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.effectiveWitnessMinFac' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexMinFactorExact' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_prime_excludes_proper_divisor' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_prime_index_prime_or_four' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.index_nineteen_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -324,6 +381,9 @@ Raw #print axioms output:
 'MathGacha.fib_prime_index_eq_one_or_neg_one' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.exists_prime_factor_eq_neg_one_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.legendreSym_five_eq_neg_one_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.primeBeyondThreeSimpleDivisors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexThreeSimplePrimes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeIndexHasFourthPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.factors_131_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_131_value' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_131_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -342,6 +402,9 @@ Raw #print axioms output:
 'MathGacha.leastFactorCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.leastFactor881' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.leastFactor17209' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.dicksonScaleEval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.oddHalfDicksonRootIff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.inertDivisorIffHalfDegree' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibState_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibState_succ' depends on axioms: [propext, Quot.sound]
 'MathGacha.fibState_step_injective' depends on axioms: [propext, Quot.sound]
@@ -352,12 +415,18 @@ Raw #print axioms output:
 'MathGacha.pow_fiber_card' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.natCard_pow_fiber' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.not_dvd_multiplier_of_neighbor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fermatScreenTo1000' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPrimeCandidatesThrough1000' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.noFibPrimeFrom138Through358' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeMemProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.lucasList' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.auxiliaryLucasPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeValue43' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeValue47' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeValue83' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.dvdIffDeletePrimeComponents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibDivisorIffPrimePowerTests' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.originalIffPrimePowerObstructions' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primorialLogLogBound' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.leastFactorLogLogPrimorial' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.dicksonFourShiftEval' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -397,6 +466,12 @@ Raw #print axioms output:
 'MathGacha.candidateT_card' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffUniformFiniteSieve' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.negativeLargeFactorForEveryTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibTripleOddResidue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.sixInertResidueAlternatives' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.dicksonSixShiftEval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.sixthDicksonRootIffCubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.primeDivisorBelowLinearSquare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.sixBoundaryDvdIffCubic' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fib_q_sub_one_dvd_of_five_square' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.splitPrimeFactorDividesQSubOne' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.minusOneSquareAtOddIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -409,5 +484,5 @@ Raw #print axioms output:
 'MathGacha.originalIffUnboundedMangoldtThreshold' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeMass_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffNotSummableFibPrimeMass' depends on axioms: [propext, Classical.choice, Quot.sound]
-Audit passed: lake build; 183 theorem/lemma axiom reports; 42 Lean files scanned.
+Audit passed: lake build; 221 theorem/lemma axiom reports; 52 Lean files scanned.
 ```

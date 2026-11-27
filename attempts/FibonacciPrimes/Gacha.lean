@@ -22,3 +22,9 @@ import Gacha.QuarticCharacter
 import Gacha.EffectiveWitness
 import Gacha.FourIndexForm
 import Gacha.PrimorialScreen
+import Gacha.PrimePowerTests
+import Gacha.OddHalf
+import Gacha.SixResidue
+import Gacha.HugeLeastFactor
+import Gacha.PrefixFermat
+import Gacha.AbelPrefix

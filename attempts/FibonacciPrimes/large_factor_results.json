@@ -1,0 +1,97 @@
+{
+  "largest_multiplier": 3000000,
+  "presieve_limit": 2000,
+  "results": [
+    {
+      "p": 4324321,
+      "tested_by_modular_doubling": 110513,
+      "divisors": []
+    },
+    {
+      "p": 85765681,
+      "tested_by_modular_doubling": 110313,
+      "divisors": [
+        {
+          "j": 88,
+          "sign": 1,
+          "divisor": 7547379929
+        }
+      ]
+    },
+    {
+      "p": 232792561,
+      "tested_by_modular_doubling": 110595,
+      "divisors": [
+        {
+          "j": 1680,
+          "sign": 1,
+          "divisor": 391091502481
+        }
+      ]
+    },
+    {
+      "p": 10708457761,
+      "tested_by_modular_doubling": 110421,
+      "divisors": []
+    },
+    {
+      "p": 26771144401,
+      "tested_by_modular_doubling": 110611,
+      "divisors": [
+        {
+          "j": 1248,
+          "sign": 1,
+          "divisor": 33410388212449
+        }
+      ]
+    },
+    {
+      "p": 401567166001,
+      "tested_by_modular_doubling": 110561,
+      "divisors": [
+        {
+          "j": 408,
+          "sign": 1,
+          "divisor": 163839403728409
+        }
+      ]
+    },
+    {
+      "p": 18632716502401,
+      "tested_by_modular_doubling": 110622,
+      "divisors": []
+    },
+    {
+      "p": 72201776446801,
+      "tested_by_modular_doubling": 110502,
+      "divisors": [
+        {
+          "j": 54,
+          "sign": -1,
+          "divisor": 3898895928127253
+        }
+      ]
+    },
+    {
+      "p": 1010824870255201,
+      "tested_by_modular_doubling": 110550,
+      "divisors": [
+        {
+          "j": 54,
+          "sign": -1,
+          "divisor": 54584542993780853
+        },
+        {
+          "j": 5694,
+          "sign": -1,
+          "divisor": 5755636811233114493
+        },
+        {
+          "j": 662994,
+          "sign": -1,
+          "divisor": 670170824029976731793
+        }
+      ]
+    }
+  ]
+}

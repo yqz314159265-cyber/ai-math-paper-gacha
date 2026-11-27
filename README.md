@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/2$。对每个固定的 $A>\log 4$，分母还可取 $A$。已给出原题等价的有限域互素检验，并用整数二次型精确判定 $4p+1$ 是否整除 $F_p$。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/2$。对每个固定的 $A>\log 4$，分母还可取 $A$。原题的有限域检验已拆成素数幂分量。指标 $1010824870255201$ 对应的项至少有四个不同的素因子。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -26,6 +26,9 @@ python attempts/FibonacciPrimes/boundary_experiment.py
 python attempts/FibonacciPrimes/dickson_experiment.py
 python attempts/FibonacciPrimes/polynomial_gcd_experiment.py
 python attempts/FibonacciPrimes/four_experiment.py
+python attempts/FibonacciPrimes/six_experiment.py
+python attempts/FibonacciPrimes/primary_experiment.py
+python attempts/FibonacciPrimes/large_factor_experiment.py
 python attempts/FibonacciPrimes/effective_experiment.py
 python attempts/FibonacciPrimes/lucas_certificates.py
 python scripts/draw.py --receipt d1
