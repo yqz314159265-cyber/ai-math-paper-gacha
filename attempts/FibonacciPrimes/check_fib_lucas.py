@@ -40,10 +40,9 @@ def fib_list(limit: int) -> list[int]:
     return out
 
 
-def check_dag(data: dict) -> tuple[dict[int, dict], int]:
-    assert data["schema"] == "lucas-primality-dag-v1"
+def check_nodes(rows: list[dict]) -> dict[int, dict]:
     checked: dict[int, dict] = {}
-    for row in data["nodesTopological"]:
+    for row in rows:
         n = int(row["n"])
         a = int(row["base"])
         factors = [int(q) for q in row["factors"]]
@@ -58,8 +57,14 @@ def check_dag(data: dict) -> tuple[dict[int, dict], int]:
         for q in set(factors):
             assert (n - 1) % q == 0
             assert pow(a, (n - 1) // q, n) != 1, f"Lucas condition failed for {n}, q={q}"
+        assert n not in checked, f"duplicate node {n}"
         checked[n] = row
+    return checked
 
+
+def check_dag(data: dict) -> tuple[dict[int, dict], int]:
+    assert data["schema"] == "lucas-primality-dag-v1"
+    checked = check_nodes(data["nodesTopological"])
     fibs = fib_list(HIGH_INDEX)
     for target in data["targets"]:
         i = int(target["index"])

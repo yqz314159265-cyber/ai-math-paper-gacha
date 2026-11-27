@@ -294,6 +294,36 @@ $$
 
 为将 Abel 极限与有限求和联系起来，先在 Lean 中建立第一 Mertens 估计 $\sum_{p\le N}(\log p)/p\sim\log N$。交换 $\log(N!)$ 的除数求和顺序后得到 $\sum_{n\le N}\Lambda(n)\lfloor N/n\rfloor$。将取整改为 $N/n$ 引起的总误差在 0 与 $\psi(N)$ 之间。切比雪夫上界、阶乘的 Stirling 下界以及 $N!\le N^N$ 给出 $\log N-1\le\sum_{n\le N}\Lambda(n)/n\le\log N+\log4+4$。再扣去高次素数幂的有界总贡献，即得上述等价式。[有限和与取整界](Gacha/MertensPrefix.lean)
 
+## 从 Abel 极限到有限素数和
+
+固定自然数 $K$。在素数 $p\le X$ 中给每个指标权重 $(\log p)/p$，则有
+$$
+\lim_{X\to\infty}\frac1{\log X}\sum_{\substack{p\le X\\P^-(F_p)>Kp}}\frac{\log p}{p}=1,
+\qquad
+\lim_{X\to\infty}\frac1{\log X}\sum_{\substack{p\le X\\P^-(F_p)\le Kp}}\frac{\log p}{p}=0.
+$$
+在坏指标的无穷级数中取 $s=1+1/\log X$。对所有 $2\le p\le X$，有 $p^{s-1}\le e$，因此坏指标的有限和除以 $\log X$ 至多是相应归一化 Abel 级数的 $e$ 倍，随 $X$ 趋于无穷而趋于零。用上一节的 Mertens 估计减去坏指标权重，即得好指标的等价式。结论采用这里给出的对数权重，筛界中的 $K$ 固定。[有限加权密度](Gacha/FiniteBadLogWeight.lean)
+
+## 指标同余怎样缩短素性证书
+
+设 $p>5$ 为素数，$N=F_p$，正整数 $d$ 与 $p$ 互素。已在模 $N$ 中核实一个阶为 $d$ 且在其所有素因子处保阶的元素。每个素因子 $q\mid N$ 都形如 $q=dx+1$，并且 $q\equiv\pm1\bmod p$。令 $j$ 为 $-2d^{-1}\bmod p$ 的最小非负代表元，则 $x\bmod p$ 只能是 $0$ 或 $j$。因此只要 $N<(dj+1)^2$ 就已证素性。
+
+当 $p\equiv2,3\bmod5$ 时可用更强的不等式。设 $\alpha,\beta$ 是特征方程 $X^2-X-1=0$ 的两个根。在特征 $p$ 下，$(\alpha-\beta)F_p=\alpha^p-\beta^p=(\alpha-\beta)^p$，且 $(\alpha-\beta)^2=5$，从而 $F_p\equiv (5/p)=-1\bmod p$。若 $N$ 为合数，把最小素因子及其互补因子写为 $dx+1,dy+1$，并交换次序，使 $p\mid x$。此时 $x\ge p$、$y\ge j$。于是 $N<(dp+1)(dj+1)$ 已足以判素。[指标剩余类与两种平方根判据](Gacha/RankOrder.lean)
+
+同样的符号条件也能缩小立方根判据所需的 $d$。写 $c=(N-1)/d$。若
+$$
+N+d^2j^2<1+d^2p+d^3pj,
+$$
+则 $x+y<dp$。事实上 $(x-j)(y-j)\ge0$ 给出 $j(x+y)\le xy+j^2$，结合 $N=1+d(x+y)+d^2xy$ 即可排除 $x+y\ge dp$。由于 $p\mid x$，商余数给出 $s=c\bmod(dp)=x+y$，$t=\lfloor c/(dp)\rfloor=xy/p$。合数因而强制 $s^2-4pt=(x-y)^2$。排除这一整数平方即可判素。[结合指标的立方根判据](Gacha/RankCubic.lean)
+
+在 $p=433$ 的具体检验中，取 $d=20354267268086208338686180768$。此时 $j=402$，$\lfloor F_{433}/d^3\rfloor=164511$，单用 $d^3>F_{433}$ 的充分条件不适用。Lean 独立核验 $d$ 的素因子、阶见证、大小界和判别式，由上述判据推出 $F_{433}$ 为素数。脚本另记录了七个正例上找到的平方根判据参数。[433 的内核证书](Gacha/RankExample.lean) · [参数搜索](rank_order_experiment.py) · [计算结果](rank_order_results.json)
+
+## 621 位整数 $F_{2971}$ 的内核证书
+
+Williams 先前已证明 $F_{2971}$ 为素数，Dubner 与 Keller 在其斐波那契素数论文中记载了这一结果。这里用可独立重放的部分分解证书核验同一项。[Dubner 与 Keller 的论文](https://citeseerx.ist.psu.edu/document?doi=4df3f6dbcd1c7400e235bac08a8cd9c415b9dd6e&repid=rep1&type=pdf)
+
+利用 $F_{2971}-1=F_{743}L_{743}L_{1485}$ 收集因子。我们将已获得的素数幂按从大到小的顺序相乘，首次越过立方根时得到 209 位的 $d$。它包含 21 个不同的素因子，递归因子证书共有 36 个 Lucas 节点。设 $c=(F_{2971}-1)/d$、$w=2^c\bmod F_{2971}$。Lean 核验了 $w^d=1$、所有 $w^{d/q}-1$ 的单位条件、$d^2<F_{2971}<d^3$，以及 $(c\bmod d)^2-4\lfloor c/d\rfloor$ 为非平方数。最后用二进制倍增验证整数恰等于 $F_{2971}$。Python 独立重算同一份证书；外部因子表只用来寻找候选整数。[Lean 素性定理](Gacha/F2971Result.lean) · [递归因子树](Gacha/F2971Factors.lean) · [模幂与单位条件](Gacha/ResidueCertificate.lean) · [证书数据](fib2971_certificate.json) · [Python 重放](check_fib2971.py) · [候选因子的 FactorDB 条目](https://factordb.com/index.php?id=1100000000193046503)
+
 ## Lean 验证
 
 Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474`，与猜想池锁文件一致。全量 `lake exe cache get` 首次遇到 5 个传输失败，重试后 8,690 个缓存文件全部解压。对较大素数直接试除消耗过多内存，最终构建使用上述短证书。[依赖锁文件](../../lake-manifest.json) · [复现命令](../../README.md#复现本轮)
@@ -301,7 +331,7 @@ Lean 为 `v4.33.1`，Mathlib 提交为 `0df444a360eaa60ab8c11dca51a86af692955474
 下列输出来自根目录的 `python scripts/audit.py`，包含 `lake build` 和逐个 `#print axioms`。原题作为命题定义保存。审计对象为本轮证明的定理和引理。
 
 ```text
-lake build final line: Build completed successfully (3918 jobs).
+lake build final line: Build completed successfully (3925 jobs).
 Raw #print axioms output:
 'MathGacha.tendsto_scaled_finiteAbelSum' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.badFibIndex_progression_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -505,6 +535,59 @@ Raw #print axioms output:
 'MathGacha.eulerPrimeRecNotSummable' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.eulerAllowedRecip_not_summable' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.existsEulerAvoidancePrimes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971LeavesPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known00_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch00_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch00_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known01_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch01_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch01_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known02_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch02_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch02_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known03_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch03_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch03_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known04_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch04_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch04_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known05_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch05_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch05_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known06_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch06_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch06_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known07_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch07_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch07_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Known08_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Batch08_check' depends on axioms: [propext, Quot.sound]
+'MathGacha.fib2971Batch08_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Certified_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971FactorsPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Unit00' does not depend on any axioms
+'MathGacha.fib2971Unit01' does not depend on any axioms
+'MathGacha.fib2971Unit02' does not depend on any axioms
+'MathGacha.fib2971Unit03' does not depend on any axioms
+'MathGacha.fib2971Unit04' does not depend on any axioms
+'MathGacha.fib2971Unit05' does not depend on any axioms
+'MathGacha.fib2971Unit06' does not depend on any axioms
+'MathGacha.fib2971Unit07' does not depend on any axioms
+'MathGacha.fib2971Unit08' does not depend on any axioms
+'MathGacha.fib2971Unit09' does not depend on any axioms
+'MathGacha.fib2971Unit10' does not depend on any axioms
+'MathGacha.fib2971Unit11' does not depend on any axioms
+'MathGacha.fib2971Unit12' does not depend on any axioms
+'MathGacha.fib2971Unit13' does not depend on any axioms
+'MathGacha.fib2971Unit14' does not depend on any axioms
+'MathGacha.fib2971Unit15' does not depend on any axioms
+'MathGacha.fib2971Unit16' does not depend on any axioms
+'MathGacha.fib2971Unit17' does not depend on any axioms
+'MathGacha.fib2971Unit18' does not depend on any axioms
+'MathGacha.fib2971Unit19' does not depend on any axioms
+'MathGacha.fib2971Unit20' does not depend on any axioms
+'MathGacha.fib2971OrderCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fib2971Prime' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibMulFirstOrder' depends on axioms: [propext, Quot.sound]
 'MathGacha.fibQuotientGcd' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibPrimePowerAtMultiple' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -525,6 +608,8 @@ Raw #print axioms output:
 'MathGacha.largeIndexExcludesForty' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fermatRejectFalse' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.nonprimeOfFermatReject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.badFibIndexLogWeight_div_log_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.goodFibIndexLogWeight_div_log_tendsto_one' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fourBoundaryFibDvdIffNonsquare' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fourBoundaryQModEight' depends on axioms: [propext, Quot.sound]
 'MathGacha.fourBoundaryFibDvdOfNonsquare' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -659,10 +744,22 @@ Raw #print axioms output:
 'MathGacha.jacobiFive_of_sumSquares_mod_four' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.quadraticChar_two_add_div_eq_jacobi_product' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.isSquare_two_add_div_iff_five_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPrimeOfRankCubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.rank433Certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.rankCubicExample433' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.rankOrderFactorClasses' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPrimeOfRankOrderSize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.inertCompositeRankFactors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPrimeOfOppositeRankOrders' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibAtIndexLegendre' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.fibPrimeOfInertIndexOrder' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffUnboundedPrimeIndices' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffSieveToSquareRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeSquareFibFactorAtNeighbor' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.fibAtPrimeSquarefreeOfNoNeighborSquare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.residuePower_sound' depends on axioms: [propext, Quot.sound]
+'MathGacha.residueUnitTest_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MathGacha.largeOrderOfResidueTests' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.screenWitnessesValid' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.screenTermsComposite' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.survivor101Composite' depends on axioms: [propext]
@@ -697,5 +794,5 @@ Raw #print axioms output:
 'MathGacha.originalIffUnboundedMangoldtThreshold' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.primeMass_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
 'MathGacha.originalIffNotSummableFibPrimeMass' depends on axioms: [propext, Classical.choice, Quot.sound]
-Audit passed: lake build; 390 theorem/lemma axiom reports; 66 Lean files scanned.
+Audit passed: lake build; 457 theorem/lemma axiom reports; 73 Lean files scanned.
 ```

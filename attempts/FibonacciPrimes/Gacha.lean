@@ -35,3 +35,6 @@ import Gacha.LucasChecker
 import Gacha.MertensPrefix
 import Gacha.CubicCertificate
 import Gacha.CertifiedPrefix
+import Gacha.FiniteBadLogWeight
+import Gacha.F2971Result
+import Gacha.RankExample
