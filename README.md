@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/2$。对每个固定的 $A>\log 4$，分母还可取 $A$。原题的有限域检验已拆成素数幂分量。指标 $1010824870255201$ 对应的项至少有四个不同的素因子。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 对任意 $A>1/2$，有任意大的素数 $p$ 满足 $P^-(F_p)>p\log\log(p)/A$，其中 $P^-$ 表示最小素因子。对每个固定 $K$，满足 $P^-(F_p)>Kp$ 的素数指标的归一化 Abel 权重趋于 1。整项素性有半指标 Lucas 数证书。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -31,6 +31,7 @@ python attempts/FibonacciPrimes/primary_experiment.py
 python attempts/FibonacciPrimes/large_factor_experiment.py
 python attempts/FibonacciPrimes/effective_experiment.py
 python attempts/FibonacciPrimes/lucas_certificates.py
+python attempts/FibonacciPrimes/check_fib_lucas.py
 python scripts/draw.py --receipt d1
 ```
 

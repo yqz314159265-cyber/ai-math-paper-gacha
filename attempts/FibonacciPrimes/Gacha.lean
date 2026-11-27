@@ -28,3 +28,10 @@ import Gacha.SixResidue
 import Gacha.HugeLeastFactor
 import Gacha.PrefixFermat
 import Gacha.AbelPrefix
+import Gacha.AbelZeroPair
+import Gacha.MaskedGrowth
+import Gacha.CubicOrder
+import Gacha.LucasChecker
+import Gacha.MertensPrefix
+import Gacha.CubicCertificate
+import Gacha.CertifiedPrefix
