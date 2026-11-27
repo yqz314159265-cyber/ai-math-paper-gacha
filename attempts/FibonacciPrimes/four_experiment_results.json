@@ -3,6 +3,7 @@
     "prime_indices": "7 \u2264 p \u2264 1,000,000",
     "q": "4p + 1",
     "criterion": "for q prime and p mod 5 = 2: q | F_p iff a=(1+sqrt(5))/2 is a quadratic nonresidue mod q",
+    "single_power": "5^p = 1 mod q (q prime, p mod 5 = 2)",
     "quadratic_form": "q = x^2 + 100*y^2 (q prime, p mod 5 = 2)",
     "implementation": "standard-library sieve and fast-doubling fib_mod imported from linear_experiment.py"
   },
@@ -17,6 +18,7 @@
       "criterion_checked": 0,
       "criterion_matches": 0,
       "both_root_signs_agree": 0,
+      "single_power_checked": 0,
       "quadratic_form_checked": 0,
       "quadratic_form_matches": 0
     },
@@ -30,6 +32,7 @@
       "criterion_checked": 2525,
       "criterion_matches": 2525,
       "both_root_signs_agree": 2525,
+      "single_power_checked": 2525,
       "quadratic_form_checked": 2525,
       "quadratic_form_matches": 2525
     },
@@ -43,6 +46,7 @@
       "criterion_checked": 0,
       "criterion_matches": 0,
       "both_root_signs_agree": 0,
+      "single_power_checked": 0,
       "quadratic_form_checked": 0,
       "quadratic_form_matches": 0
     },
@@ -56,6 +60,7 @@
       "criterion_checked": 0,
       "criterion_matches": 0,
       "both_root_signs_agree": 0,
+      "single_power_checked": 0,
       "quadratic_form_checked": 0,
       "quadratic_form_matches": 0
     }

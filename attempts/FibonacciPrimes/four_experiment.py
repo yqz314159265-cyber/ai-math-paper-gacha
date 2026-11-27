@@ -43,6 +43,7 @@ def main() -> None:
         "criterion_checked": 0,
         "criterion_matches": 0,
         "both_root_signs_agree": 0,
+        "single_power_checked": 0,
         "quadratic_form_checked": 0,
         "quadratic_form_matches": 0,
     })
@@ -86,6 +87,9 @@ def main() -> None:
         if q_is_prime and r == 2:
             # Here q ≡ 4 (mod 5) and q ≡ 5 (mod 8), so sqrt(5) exists.
             assert q % 5 == 4 and q % 8 == 5
+            if (pow(5, p, q) == 1) != divides:
+                raise ValueError(f"base-five power test disagrees at p={p}, q={q}")
+            stat["single_power_checked"] += 1
             represented = any(
                 isqrt(q - 100*y*y)**2 == q - 100*y*y
                 for y in range(isqrt(q // 100) + 1)
@@ -141,6 +145,7 @@ def main() -> None:
             "prime_indices": "7 ≤ p ≤ 1,000,000",
             "q": "4p + 1",
             "criterion": "for q prime and p mod 5 = 2: q | F_p iff a=(1+sqrt(5))/2 is a quadratic nonresidue mod q",
+            "single_power": "5^p = 1 mod q (q prime, p mod 5 = 2)",
             "quadratic_form": "q = x^2 + 100*y^2 (q prime, p mod 5 = 2)",
             "implementation": "standard-library sieve and fast-doubling fib_mod imported from linear_experiment.py",
         },

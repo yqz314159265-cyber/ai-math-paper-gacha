@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 已将原题等价化为有限域中两多项式的互素检验，证明了固定线性筛界下的 Abel 权重下界。已完整判定第 0 项到第 137 项的素性。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 存在任意大的素数指标 $p$，使 $F_p$ 的最小素因子超过 $p\log\log(p)/20$。已给出原题等价的有限域互素检验和 $4p+1$ 的精确模幂判据。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -26,6 +26,7 @@ python attempts/FibonacciPrimes/boundary_experiment.py
 python attempts/FibonacciPrimes/dickson_experiment.py
 python attempts/FibonacciPrimes/polynomial_gcd_experiment.py
 python attempts/FibonacciPrimes/four_experiment.py
+python attempts/FibonacciPrimes/effective_experiment.py
 python attempts/FibonacciPrimes/lucas_certificates.py
 python scripts/draw.py --receipt d1
 ```

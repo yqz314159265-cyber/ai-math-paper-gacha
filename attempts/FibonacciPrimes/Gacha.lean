@@ -17,3 +17,6 @@ import Gacha.SieveLimit
 import Gacha.LargePrefix
 import Gacha.AbelSieve
 import Gacha.DicksonTests
+import Gacha.DicksonGcd
+import Gacha.QuarticCharacter
+import Gacha.EffectiveWitness
