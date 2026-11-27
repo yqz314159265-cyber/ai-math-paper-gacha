@@ -1,0 +1,23 @@
+{
+  "first_prime_index_above_five": {
+    "1": 7,
+    "2": 13,
+    "4": 47,
+    "8": 167,
+    "16": 881,
+    "32": 17209,
+    "64": 246809
+  },
+  "least_factors": [
+    {
+      "index": 881,
+      "multiplier": 300,
+      "least_factor": 264301
+    },
+    {
+      "index": 17209,
+      "multiplier": 302,
+      "least_factor": 5197117
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 
 | 题号 | 方向 | 状态 | 结论 | Lean 入口 |
 | --- | --- | --- | --- | --- |
-| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 证明固定有限筛的极限、奇指标项的素因子限制，并完整判定从第 0 项到第 93 项的素性。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
+| [FibonacciPrimes · 研究报告](attempts/FibonacciPrimes/REPORT.md) | 初等数论 | **Partial** | 证明素数指标的最小素因子相对指标之比无界，完整判定第 0 项到第 93 项的素性。无限性仍待证明。 | [Gacha.lean](attempts/FibonacciPrimes/Gacha.lean) |
 
 ## 复现本轮
 
@@ -21,6 +21,7 @@ lake exe cache get
 lake build
 python scripts/audit.py
 python attempts/FibonacciPrimes/experiment.py
+python attempts/FibonacciPrimes/linear_experiment.py
 python scripts/draw.py --receipt d1
 ```
 
