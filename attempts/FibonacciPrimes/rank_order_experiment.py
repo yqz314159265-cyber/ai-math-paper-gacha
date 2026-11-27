@@ -10,9 +10,9 @@ from check_fib_lucas import check_dag
 DIRECTORY = Path(__file__).parent
 
 
-def candidate_orders(powers, random_source, n, exponent):
+def candidate_orders(powers, random_source, n, exponent, rounds=1_000):
     """Sample prefix products below the classical square or cube threshold."""
-    for _ in range(1_000):
+    for _ in range(rounds):
         random_source.shuffle(powers)
         d = 1
         factors = []
@@ -33,10 +33,44 @@ def make_witness(n, a, d, factors):
     return w
 
 
+def split_discriminants(n, modulus, negative_base):
+    """Recover each same-class quadratic and keep only nonsquare cases."""
+    if n % negative_base == 0:
+        return None
+    assert n % modulus == 1 and negative_base**2 % modulus == 1
+    discriminants = []
+    for b in (1, negative_base):
+        quotient = max(n-b*b, 0)//modulus
+        total = b*quotient % modulus
+        product = max(quotient-b*total, 0)//modulus
+        delta = total*total-4*product
+        if delta >= 0 and math.isqrt(delta)**2 == delta:
+            return None
+        discriminants.append(delta)
+    return discriminants
+
+
+def split_cube_example(p, n, a, powers, rng):
+    best = None
+    for d, factors in candidate_orders(powers, rng, n, 3, rounds=1_300):
+        modulus = d*p
+        if n >= modulus**3:
+            continue
+        b = (d*((-2*pow(d, -1, p))%p)+1)%modulus
+        discriminants = split_discriminants(n, modulus, b)
+        if discriminants is not None and (best is None or d < best["d"]):
+            best = dict(p=p, n=n, d=d, qs=factors, b=b, discriminants=discriminants)
+    assert best is not None
+    best["w"] = make_witness(n, a, best["d"], best["qs"])
+    return best
+
+
 def main():
     data = json.loads((DIRECTORY/"FibLucasDAG.json").read_text(encoding="utf8"))
     check_dag(data)
     rng = random.Random(2971)
+    split_rng = random.Random(1471)
+    split_examples = []
     square_examples = []
     cube_examples = []
     for target in data["targets"]:
@@ -45,6 +79,11 @@ def main():
         powers = [(q, e) for q, e in counts.items() if q != p]
         inert = n%p == p-1
         assert inert == (p%5 in (2, 3))
+
+        if not inert:
+            item = split_cube_example(p, n, a, powers.copy(), split_rng)
+            split_examples.append(item)
+            print(f"F_{p}: split cubic floor(F_p/d³)={n//item['d']**3}, p³={p**3}.")
 
         best = None
         for d, factors in candidate_orders(powers, rng, n, 2):
@@ -83,7 +122,7 @@ def main():
         cube_examples.append(best_cube)
         print(f"F_{p}: cubic j={best_cube['j']}, floor(F_p/d³)={n//best_cube['d']**3}.")
 
-    result = {"square": square_examples, "cubic": cube_examples}
+    result = {"square": square_examples, "cubic": cube_examples, "splitCubic": split_examples}
     (DIRECTORY/"rank_order_results.json").write_text(json.dumps(result, indent=2)+"\n", encoding="utf8")
 
 

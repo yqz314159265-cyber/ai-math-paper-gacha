@@ -38,3 +38,8 @@ import Gacha.CertifiedPrefix
 import Gacha.FiniteBadLogWeight
 import Gacha.F2971Result
 import Gacha.RankExample
+import Gacha.SplitRankExample
+import Gacha.MinusPairBridge
+import Gacha.PairCountBridge
+import Gacha.GaussianFib
+import Gacha.MovingDensity
